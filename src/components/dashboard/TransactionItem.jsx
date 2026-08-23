@@ -32,7 +32,7 @@ export default function TransactionItem({ transaction }) {
         </div>
       </div>
       <span className={`text-sm font-medium ${isPositive ? 'text-income' : 'text-expense'}`}>
-        {isPositive ? '+' : '-'}${Math.abs(transaction.amount).toFixed(2)}
+        {isPositive ? '+' : '-'}₹{Math.abs(transaction.amount).toFixed(2)}
       </span>
     </div>
   );

@@ -20,6 +20,7 @@ export default function SpendingChart() {
             <Tooltip
               contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }}
               labelStyle={{ color: '#E2E8F0' }}
+              formatter={(value) => [`₹${value}`, 'Spent']}
             />
             <Line type="monotone" dataKey="amount" stroke="#3B82F6" strokeWidth={2} dot={{ r: 3 }} />
           </LineChart>

@@ -29,7 +29,7 @@ export default function Dashboard() {
             <p className="text-sm text-text-secondary mb-1">Total Balance</p>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-semibold text-text-primary">
-                ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
               <span className="text-income text-sm">+2.1% today</span>
             </div>

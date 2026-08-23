@@ -50,7 +50,7 @@ export default function Accounts() {
             <p className="text-xs text-slate-500 mb-1">{acc.type}</p>
             <p className="text-sm text-text-secondary mb-3">**** {acc.lastDigits}</p>
             <p className="text-lg font-semibold text-text-primary">
-              ${acc.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ₹{acc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </p>
           </div>
         ))}

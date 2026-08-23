@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import AppLayout from './components/layout/AppLayout';
 import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Accounts from './pages/Accounts';
 import Payments from './pages/Payments';
@@ -24,6 +25,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
           <Route path="/accounts" element={<Protected><Accounts /></Protected>} />
           <Route path="/payments" element={<Protected><Payments /></Protected>} />

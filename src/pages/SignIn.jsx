@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Landmark } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
@@ -27,7 +27,7 @@ export default function SignIn() {
       <div className="w-full max-w-sm">
         <div className="flex items-center gap-2 justify-center mb-6">
           <Landmark className="text-primary" size={28} />
-          <span className="text-xl font-semibold text-text-primary">Aura Bank</span>
+          <span className="text-xl font-semibold text-text-primary">Ronak Bank</span>
         </div>
 
         <form
@@ -60,6 +60,13 @@ export default function SignIn() {
             Try: user1 / password123
           </p>
         </form>
+
+        <p className="text-center text-sm text-text-secondary mt-4">
+          New to Ronak Bank?{' '}
+          <Link to="/signup" className="text-primary hover:underline">
+            Open an account
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export default function Investments() {
       <div className="bg-card border border-border rounded-lg p-4">
         <p className="text-sm text-text-secondary mb-1">Total Portfolio Value</p>
         <span className="text-3xl font-semibold text-text-primary">
-          ${mockInvestments.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          ₹{mockInvestments.totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
         </span>
       </div>
 
@@ -91,7 +91,7 @@ export default function Investments() {
                 <td className="py-2 text-text-primary font-medium">{h.symbol}</td>
                 <td className="py-2 text-text-secondary">{h.name}</td>
                 <td className="py-2 text-text-secondary">{h.units}</td>
-                <td className="py-2 text-text-primary">${h.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                <td className="py-2 text-text-primary">₹{h.value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td className={`py-2 ${h.change >= 0 ? 'text-income' : 'text-expense'}`}>
                   {h.change >= 0 ? '+' : ''}{h.change}%
                 </td>

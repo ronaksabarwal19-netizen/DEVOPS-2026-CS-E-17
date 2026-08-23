@@ -12,7 +12,7 @@ export default function AccountCard({ account }) {
       </p>
       <div className="flex items-center justify-between">
         <span className="text-text-primary font-semibold">
-          ${account.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          ₹{account.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
         </span>
         <span className="text-xs text-slate-400">{account.cardType}</span>
       </div>

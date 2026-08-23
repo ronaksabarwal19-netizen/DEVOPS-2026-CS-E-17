@@ -54,7 +54,7 @@ export default function Payments() {
     setTransactions(updatedTransactions);
     setItem(KEYS.TRANSACTIONS, updatedTransactions);
 
-    setSuccess(`Sent $${amount.toFixed(2)} to ${form.recipient}`);
+    setSuccess(`Sent ₹${amount.toFixed(2)} to ${form.recipient}`);
     setForm({ recipient: '', amount: '', note: '' });
   }
 
