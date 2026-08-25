@@ -70,20 +70,34 @@ async function testRoute(route) {
 }
 
 async function main() {
+  // Check that package.json exists
   try {
     await access(new URL('./package.json', import.meta.url));
   } catch {
     throw new Error(
-      'package.json was not found. Configure Jenkins to build the project root and the master branch.'
+      'package.json was not found. Run this test from the project root.'
     );
   }
 
+  console.log('Installing dependencies...');
   await run('npm', ['ci']);
+
+  console.log('Building project...');
   await run('npm', ['run', 'build']);
+
+  console.log('Starting preview server...');
 
   const server = spawn(
     'npm',
-    ['run', 'preview', '--', '--host', host, '--port', String(port)],
+    [
+      'run',
+      'preview',
+      '--',
+      '--host',
+      host,
+      '--port',
+      String(port)
+    ],
     {
       stdio: 'inherit',
       shell: false
@@ -91,16 +105,23 @@ async function main() {
   );
 
   try {
+    console.log(`Waiting for server at ${baseUrl}...`);
+
     await waitForServer();
+
+    console.log('Server started successfully.\n');
 
     for (const route of routes) {
       await testRoute(route);
       console.log(`PASS ${route}`);
     }
 
-    console.log(`\nAll ${routes.length} website smoke tests passed.`);
+    console.log(
+      `\nAll ${routes.length} website smoke tests passed.`
+    );
   } finally {
     server.kill('SIGTERM');
+
     await once(server, 'exit').catch(() => {});
   }
 }
