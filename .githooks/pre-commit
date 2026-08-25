@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+echo "Running lint before commit..."
+npm run lint
+
+echo "Running production build before commit..."
+npm run build
+
+echo "Pre-commit checks passed."

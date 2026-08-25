@@ -60,6 +60,32 @@ npm run dev
 
 Open the local URL Vite prints (usually `http://localhost:5173`).
 
+## Git and Jenkins Automation
+
+Enable the shared Git hook once after cloning:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The pre-commit hook runs `npm run lint` and `npm run build`, so a commit is
+created only after both checks pass. It does not create or push commits
+automatically, which avoids committing unintended files or causing CI loops.
+
+To run Jenkins for every pushed commit:
+
+1. Create a Jenkins Pipeline or Multibranch Pipeline job using this repository
+  and the `Jenkinsfile` in the repository root.
+2. Install/configure the Node.js and GitHub Branch Source plugins, and make
+  Node.js available to the agent running the job.
+3. Configure the repository webhook to send push events to
+  `https://<jenkins-host>/github-webhook/`.
+4. Enable the GitHub push trigger on the Jenkins job and configure the
+  repository credentials if it is private.
+
+Each push then runs `npm ci`, linting, and the production Vite build. Successful
+`dist/` files are retained as Jenkins build artifacts.
+
 ## Mock Login Credentials
 
 | ID | Password |
