@@ -45,6 +45,15 @@ npm run dev
 
 Open the local URL Vite prints (usually `http://localhost:5173`).
 
+Run website smoke tests with:
+
+```bash
+npm test
+```
+
+This builds the application, starts a local production preview, and checks the
+HTTP response and React app shell for every configured route.
+
 ## Git and Jenkins Automation
 
 Enable the shared Git hook once after cloning:
