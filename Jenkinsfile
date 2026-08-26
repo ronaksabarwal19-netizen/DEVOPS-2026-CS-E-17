@@ -38,10 +38,11 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true 
         }
         cleanup {
             deleteDir()
         }
     }
 }
+// shreya
