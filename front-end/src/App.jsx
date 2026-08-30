@@ -1,7 +1,11 @@
+// ─── Router & Auth ───────────────────────────────────────────────────────────
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/layout/ProtectedRoute';
-import AppLayout from './components/layout/AppLayout';
+
+// ─── Layout components (barrel import) ───────────────────────────────────────
+import { ProtectedRoute, AppLayout } from './components/layout';
+
+// ─── Pages ───────────────────────────────────────────────────────────────────
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
@@ -11,6 +15,9 @@ import Cards from './pages/Cards';
 import Investments from './pages/Investments';
 import Settings from './pages/Settings';
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Wraps a page with auth guard + shared app chrome (Sidebar + Header). */
 function Protected({ children }) {
   return (
     <ProtectedRoute>
@@ -19,19 +26,24 @@ function Protected({ children }) {
   );
 }
 
+// ─── App (root) ───────────────────────────────────────────────────────────────
+
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
-          <Route path="/accounts" element={<Protected><Accounts /></Protected>} />
-          <Route path="/payments" element={<Protected><Payments /></Protected>} />
-          <Route path="/cards" element={<Protected><Cards /></Protected>} />
+
+          {/* Protected routes — require login */}
+          <Route path="/dashboard"   element={<Protected><Dashboard /></Protected>} />
+          <Route path="/accounts"    element={<Protected><Accounts /></Protected>} />
+          <Route path="/payments"    element={<Protected><Payments /></Protected>} />
+          <Route path="/cards"       element={<Protected><Cards /></Protected>} />
           <Route path="/investments" element={<Protected><Investments /></Protected>} />
-          <Route path="/settings" element={<Protected><Settings /></Protected>} />
+          <Route path="/settings"    element={<Protected><Settings /></Protected>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
