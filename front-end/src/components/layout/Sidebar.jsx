@@ -17,7 +17,7 @@ export default function Sidebar() {
       <aside className="hidden md:flex flex-col w-56 shrink-0 bg-card border-r border-border h-screen sticky top-0 p-4">
         <div className="flex items-center gap-2 mb-8 px-2">
           <Landmark className="text-primary" size={22} />
-          <span className="font-semibold text-text-primary">Ronak Bank</span>
+          <span className="font-semibold text-text-primary">Aurevia Bank</span>
         </div>
         <nav className="flex flex-col gap-1">
           {navItems.map(({ to, label, icon: Icon }) => (

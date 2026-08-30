@@ -9,7 +9,7 @@ export const mockUsers = [
 export const mockAccounts = [
   {
     id: 'acc1',
-    name: 'Ronak Bank Savings',
+    name: 'Aurevia Bank Savings',
     type: 'Savings',
     balance: 245800.50,
     lastDigits: '4158',
@@ -17,7 +17,7 @@ export const mockAccounts = [
   },
   {
     id: 'acc2',
-    name: 'Ronak Bank Current',
+    name: 'Aurevia Bank Current',
     type: 'Current',
     balance: 118420.75,
     lastDigits: '7930',
@@ -25,7 +25,7 @@ export const mockAccounts = [
   },
   {
     id: 'acc3',
-    name: 'Ronak Bank Salary',
+    name: 'Aurevia Bank Salary',
     type: 'Salary',
     balance: 0.00,
     lastDigits: '2210',

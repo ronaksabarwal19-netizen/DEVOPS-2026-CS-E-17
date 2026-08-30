@@ -69,7 +69,7 @@ export default function SignUp() {
       <div className="w-full max-w-md">
         <div className="flex items-center gap-2 justify-center mb-6">
           <Landmark className="text-primary" size={28} />
-          <span className="text-xl font-semibold text-text-primary">Ronak Bank</span>
+          <span className="text-xl font-semibold text-text-primary">Aurevia Bank</span>
         </div>
 
         <div className="bg-card border border-border rounded-lg p-6">
@@ -100,7 +100,7 @@ export default function SignUp() {
               <div>
                 <h2 className="text-lg font-semibold text-text-primary mb-1">Connect your bank account</h2>
                 <p className="text-sm text-text-secondary">
-                  Select your existing bank to link it with Ronak Bank (simulated).
+                  Select your existing bank to link it with Aurevia Bank (simulated).
                 </p>
               </div>
               <div className="flex flex-col gap-2">
@@ -153,7 +153,7 @@ export default function SignUp() {
             <form onSubmit={handleCreateAccount} className="flex flex-col gap-3">
               <div>
                 <h2 className="text-lg font-semibold text-text-primary mb-1">Create your login</h2>
-                <p className="text-sm text-text-secondary">Set up your Ronak Bank ID and password.</p>
+                <p className="text-sm text-text-secondary">Set up your Aurevia Bank ID and password.</p>
               </div>
               <Input label="Full Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
@@ -172,7 +172,7 @@ export default function SignUp() {
               <div>
                 <h2 className="text-lg font-semibold text-text-primary mb-1">Account created</h2>
                 <p className="text-sm text-text-secondary">
-                  Welcome to Ronak Bank, {form.name}. Sign in with your new ID <span className="text-text-primary">{form.id}</span> to continue.
+                  Welcome to Aurevia Bank, {form.name}. Sign in with your new ID <span className="text-text-primary">{form.id}</span> to continue.
                 </p>
               </div>
               <Button onClick={() => navigate('/')} className="w-full">Go to Sign In</Button>
