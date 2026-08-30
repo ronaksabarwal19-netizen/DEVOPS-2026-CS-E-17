@@ -1,5 +1,16 @@
 node_modules
 dist
 .env
+
+# macOS
 .DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverrideDirectory
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
 *.local
