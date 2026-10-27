@@ -1,0 +1,43 @@
+@base = http://localhost:4000/api
+
+### Health
+GET {{base}}/health
+
+### Login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password123"
+}
+
+### Set token manually after login
+@token = paste-jwt-here
+
+### Current user
+GET {{base}}/auth/me
+Authorization: Bearer {{token}}
+
+### Accounts
+GET {{base}}/accounts
+Authorization: Bearer {{token}}
+
+### Transactions
+GET {{base}}/transactions
+Authorization: Bearer {{token}}
+
+### Payees
+GET {{base}}/payments/payees
+Authorization: Bearer {{token}}
+
+### Simulated payment
+POST {{base}}/payments/send
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "Rahul Gupta",
+  "amount": 100,
+  "note": "Demo transfer"
+}
