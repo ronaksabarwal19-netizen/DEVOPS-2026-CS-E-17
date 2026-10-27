@@ -43,3 +43,7 @@ Open `http://localhost:5173`. The default API URL is `http://localhost:4000/api`
 Demo login after seeding: `user1` / `password123`.
 
 The frontend registration/login use the API. Other banking data and actions are simulated coursework features. See `back-end/README.md` for API details.
+
+## Docker deployment
+
+To run the production frontend and API containers together, see [DOCKER.md](./DOCKER.md). The Compose setup requires a private `JWT_SECRET` in a root `.env` file.
