@@ -1,6 +1,13 @@
-node_modules
-dist
+node_modules/
+**/node_modules/
+dist/
+**/dist/
 .env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 
 # macOS
 .DS_Store
@@ -14,3 +21,8 @@ ehthumbs.db
 Desktop.ini
 
 *.local
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-shm
+*.sqlite-wal

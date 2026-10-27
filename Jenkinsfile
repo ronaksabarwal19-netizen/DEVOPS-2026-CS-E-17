@@ -19,26 +19,32 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                sh 'npm ci'
+                dir('front-end') {
+                    sh 'npm ci'
+                }
             }
         }
 
         stage('Lint') {
             steps {
-                sh 'npm run lint'
+                dir('front-end') {
+                    sh 'npm run lint'
+                }
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                dir('front-end') {
+                    sh 'npm run build'
+                }
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true 
+            archiveArtifacts artifacts: 'front-end/dist/**', allowEmptyArchive: true
         }
         cleanup {
             deleteDir()

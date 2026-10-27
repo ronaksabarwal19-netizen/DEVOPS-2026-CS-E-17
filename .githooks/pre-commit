@@ -3,6 +3,7 @@
 set -e
 
 echo "Running lint before commit..."
+cd front-end
 npm run lint
 
 echo "Running production build before commit..."
