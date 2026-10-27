@@ -1,54 +1,45 @@
 pipeline {
-    agent any
+        agent any
 
-    options {
-        disableConcurrentBuilds()
-        skipDefaultCheckout(true)
-    }
-
-    triggers {
-        githubPush()
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+        options {
+                    skipDefaultCheckout(true)
+                    timestamps()
         }
 
-        stage('Install dependencies') {
-            steps {
-                dir('front-end') {
-                    sh 'npm ci'
-                }
-            }
-        }
+        stages {
+                    stage('Checkout') {
+                                    steps {
+                                                        checkout scm
+                                    }
+                    }
 
-        stage('Lint') {
-            steps {
-                dir('front-end') {
-                    sh 'npm run lint'
-                }
-            }
-        }
+                    stage('Check Node.js') {
+                                    steps {
+                                                        sh '''
+                                                                            node --version
+                                                                                                npm --version
+                                                                                                                    node -e "const [major, minor] = process.versions.node.split('.').map(Number); if (!(major > 22 || (major === 22 && minor >= 12) || (major === 20 && minor >= 19))) { console.error('Node.js 20.19+ or 22.12+ is required'); process.exit(1); }"
+                                                                                                                                    '''
+                                    }
+                    }
 
-        stage('Build') {
-            steps {
-                dir('front-end') {
-                    sh 'npm run build'
-                }
-            }
-        }
-    }
+                    stage('Frontend') {
+                                    steps {
+                                                        dir('front-end') {
+                                                                                sh 'npm ci'
+                                                                                sh 'npm run lint'
+                                                                                sh 'npm run build'
+                                                        }
+                                    }
+                    }
 
-    post {
-        always {
-            archiveArtifacts artifacts: 'front-end/dist/**', allowEmptyArchive: true
+                    stage('Backend') {
+                                    steps {
+                                                        dir('back-end') {
+                                                                                sh 'npm ci'
+                                                                                sh "find src -type f -name '*.js' -print0 | xargs -0 -n1 node --check"
+                                                        }
+                                    }
+                    }
         }
-        cleanup {
-            deleteDir()
-        }
-    }
 }
-// shreya
