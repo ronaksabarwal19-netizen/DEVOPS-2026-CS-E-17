@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { mockInvestments } from '../data/mockData';
+import { api } from '../utils/api';
 import Button from '../components/ui/Button';
 
 const periods = ['1D', '1W', '1M', '6M', '1Y'];
@@ -9,10 +10,16 @@ const periods = ['1D', '1W', '1M', '6M', '1Y'];
 export default function Investments() {
   const [period, setPeriod] = useState('1Y');
   const [showInsights, setShowInsights] = useState(false);
+  const [portfolio, setPortfolio] = useState(mockInvestments);
+
+  useEffect(() => {
+    api('/investments').then((data) => setPortfolio(data.portfolio || mockInvestments))
+      .catch((err) => console.error('Unable to load portfolio:', err));
+  }, []);
 
   const chartData = period === '1Y'
-    ? mockInvestments.performance
-    : mockInvestments.performance.slice(-3);
+    ? portfolio.performance
+    : portfolio.performance.slice(-3);
 
   return (
     <div className="flex flex-col gap-6">
@@ -21,7 +28,7 @@ export default function Investments() {
       <div className="bg-card border border-border rounded-lg p-4">
         <p className="text-sm text-text-secondary mb-1">Total Portfolio Value</p>
         <span className="text-3xl font-semibold text-text-primary">
-          ₹{mockInvestments.totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+          ₹{portfolio.totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
         </span>
       </div>
 
@@ -86,7 +93,7 @@ export default function Investments() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {mockInvestments.holdings.map((h) => (
+            {portfolio.holdings.map((h) => (
               <tr key={h.symbol}>
                 <td className="py-2 text-text-primary font-medium">{h.symbol}</td>
                 <td className="py-2 text-text-secondary">{h.name}</td>

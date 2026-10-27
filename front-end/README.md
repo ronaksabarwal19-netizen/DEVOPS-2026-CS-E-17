@@ -1,9 +1,6 @@
-# Digital Banking Dashboard
+# Aurevia Bank Frontend
 
-A single-page banking dashboard built with React for a B.Tech coursework submission. It simulates a
-digital bank — sign in, view accounts and balances, send money, manage cards, and track a mock
-investment portfolio — all running entirely in the browser with `localStorage` acting as the database.
-There is no real backend, no real money, and no real API calls.
+React/Vite frontend for the Aurevia Bank coursework demo. Registration and login use the Express backend; other banking data and actions are simulated. This is not a real banking application and does not handle real money.
 
 ## Features
 
@@ -52,13 +49,12 @@ src/
 ## Setup Instructions
 
 ```bash
-git clone <this-repo-url>
-cd banking-dashboard
-npm install
+cd front-end
+npm ci
 npm run dev
 ```
 
-Open the local URL Vite prints (usually `http://localhost:5173`).
+Open `http://localhost:5173`. Start the API separately from `back-end/`; it defaults to `http://localhost:4000/api`. Configure a different URL with `VITE_API_URL` in a local `.env` file.
 
 ## Mock Login Credentials
 

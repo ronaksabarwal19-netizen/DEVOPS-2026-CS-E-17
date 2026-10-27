@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Landmark, ShieldCheck, CheckCircle2, Building2 } from 'lucide-react';
-import { getItem, setItem, KEYS } from '../utils/localStorage';
+import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
@@ -23,6 +23,7 @@ export default function SignUp() {
   const [form, setForm] = useState({ name: '', email: '', mobile: '', id: '', password: '' });
   const [formError, setFormError] = useState('');
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   function handleConnectBank() {
     if (!selectedBank) return;
@@ -40,7 +41,7 @@ export default function SignUp() {
     setStep(2);
   }
 
-  function handleCreateAccount(e) {
+  async function handleCreateAccount(e) {
     e.preventDefault();
     setFormError('');
 
@@ -53,14 +54,18 @@ export default function SignUp() {
       return;
     }
 
-    const users = getItem(KEYS.USERS, []);
-    if (users.some((u) => u.id === form.id)) {
-      setFormError('That ID is already taken. Choose another.');
+    const result = await register({
+      username: form.id,
+      password: form.password,
+      name: form.name,
+      email: form.email,
+      mobile: form.mobile,
+      bankName: selectedBank,
+    });
+    if (!result.success) {
+      setFormError(result.error || 'Unable to create account.');
       return;
     }
-
-    const newUser = { id: form.id, password: form.password, name: form.name, email: form.email };
-    setItem(KEYS.USERS, [...users, newUser]);
     setStep(3);
   }
 

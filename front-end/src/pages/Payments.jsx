@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
-import { getItem, setItem, KEYS } from '../utils/localStorage';
+import { api } from '../utils/api';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import TransactionItem from '../components/dashboard/TransactionItem';
@@ -14,12 +14,12 @@ export default function Payments() {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    setAccounts(getItem(KEYS.ACCOUNTS, []));
-    setPayees(getItem(KEYS.PAYEES, []));
-    setTransactions(getItem(KEYS.TRANSACTIONS, []));
+    Promise.all([api('/accounts'), api('/payments/payees'), api('/transactions')])
+      .then(([a, p, t]) => { setAccounts(a.accounts || []); setPayees(p.payees || []); setTransactions(t.transactions || []); })
+      .catch((err) => setError(err.message));
   }, []);
 
-  function handleSend(e) {
+  async function handleSend(e) {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -30,31 +30,20 @@ export default function Payments() {
       return;
     }
 
-    const primaryAccount = accounts[0];
-    if (!primaryAccount || primaryAccount.balance < amount) {
-      setError('Insufficient balance in primary account.');
+    try {
+      const result = await api('/payments/send', {
+        method: 'POST',
+        body: JSON.stringify({ recipient: form.recipient, amount, note: form.note }),
+      });
+      const [accountData, transactionData] = await Promise.all([api('/accounts'), api('/transactions')]);
+      setAccounts(accountData.accounts || []);
+      setTransactions(transactionData.transactions || []);
+    } catch (err) {
+      setError(err.message);
       return;
     }
 
-    const updatedAccounts = accounts.map((acc, i) =>
-      i === 0 ? { ...acc, balance: acc.balance - amount } : acc
-    );
-    setAccounts(updatedAccounts);
-    setItem(KEYS.ACCOUNTS, updatedAccounts);
-
-    const newTransaction = {
-      id: `t${Date.now()}`,
-      name: `Payment to ${form.recipient}`,
-      amount: -amount,
-      date: new Date().toISOString().slice(0, 10),
-      type: 'payment',
-      icon: 'send',
-    };
-    const updatedTransactions = [newTransaction, ...transactions];
-    setTransactions(updatedTransactions);
-    setItem(KEYS.TRANSACTIONS, updatedTransactions);
-
-    setSuccess(`Sent ₹${amount.toFixed(2)} to ${form.recipient}`);
+    setSuccess(`Payment recorded: ₹${amount.toFixed(2)} to ${form.recipient} (demo only)`);
     setForm({ recipient: '', amount: '', note: '' });
   }
 

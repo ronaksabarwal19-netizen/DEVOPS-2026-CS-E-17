@@ -12,9 +12,10 @@ export default function SignIn() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const result = login(id, password);
+    setError('');
+    const result = await login(id, password);
     if (result.success) {
       navigate('/dashboard');
     } else {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getItem, setItem, KEYS } from '../utils/localStorage';
+import { api } from '../utils/api';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
@@ -13,21 +13,13 @@ export default function Settings() {
   const [notifs, setNotifs] = useState({ email: true, sms: false, push: true });
 
   useEffect(() => {
-    setNotifs(getItem(KEYS.SETTINGS, { email: true, sms: false, push: true }));
+    api('/settings').then((data) => setNotifs(data.settings)).catch((err) => setPwMessage(err.message));
   }, []);
 
-  function handlePasswordChange(e) {
+  async function handlePasswordChange(e) {
     e.preventDefault();
     setPwMessage('');
 
-    const users = getItem(KEYS.USERS, []);
-    const idx = users.findIndex((u) => u.id === user?.id);
-    if (idx === -1) return;
-
-    if (users[idx].password !== passwords.current) {
-      setPwMessage('Current password is incorrect.');
-      return;
-    }
     if (passwords.next.length < 6) {
       setPwMessage('New password must be at least 6 characters.');
       return;
@@ -36,17 +28,29 @@ export default function Settings() {
       setPwMessage('New passwords do not match.');
       return;
     }
+    try {
+      await api('/auth/password', {
+        method: 'PATCH',
+        body: JSON.stringify({ currentPassword: passwords.current, newPassword: passwords.next }),
+      });
+    } catch (err) {
+      setPwMessage(err.message);
+      return;
+    }
 
-    users[idx] = { ...users[idx], password: passwords.next };
-    setItem(KEYS.USERS, users);
     setPasswords({ current: '', next: '', confirm: '' });
     setPwMessage('Password updated successfully.');
   }
 
-  function toggleNotif(key) {
+  async function toggleNotif(key) {
     const updated = { ...notifs, [key]: !notifs[key] };
     setNotifs(updated);
-    setItem(KEYS.SETTINGS, updated);
+    try {
+      await api('/settings', { method: 'PUT', body: JSON.stringify(updated) });
+    } catch (err) {
+      setNotifs(notifs);
+      setPwMessage(err.message);
+    }
   }
 
   function handleLogout() {

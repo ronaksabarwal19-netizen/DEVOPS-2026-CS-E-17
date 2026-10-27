@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Snowflake } from 'lucide-react';
-import { getItem, setItem, KEYS } from '../utils/localStorage';
+import { api } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 
@@ -11,18 +11,26 @@ export default function Cards() {
   const [toast, setToast] = useState('');
 
   useEffect(() => {
-    setAccounts(getItem(KEYS.ACCOUNTS, []));
-    setFrozen(getItem(KEYS.CARDS_FROZEN, {}));
+    Promise.all([api('/accounts'), api('/cards')]).then(([a, c]) => {
+      setAccounts(a.accounts || []);
+      setFrozen(Object.fromEntries((c.cards || []).map((card) => [card.id, card.frozen])));
+    }).catch((err) => setToast(err.message));
   }, []);
 
-  function toggleFreeze(id) {
-    const updated = { ...frozen, [id]: !frozen[id] };
-    setFrozen(updated);
-    setItem(KEYS.CARDS_FROZEN, updated);
+  async function toggleFreeze(id) {
+    try {
+      const result = await api(`/cards/${encodeURIComponent(id)}/freeze`, {
+        method: 'PATCH', body: JSON.stringify({ frozen: !frozen[id] }),
+      });
+      setFrozen((current) => ({ ...current, [id]: result.frozen }));
+    } catch (err) { setToast(err.message); }
   }
 
-  function handleRequestCard() {
-    setToast('Virtual card request submitted. It will appear within 1-2 business days.');
+  async function handleRequestCard() {
+    try {
+      await api('/cards/request', { method: 'POST', body: JSON.stringify({}) });
+      setToast('Virtual card request submitted (demo only).');
+    } catch (err) { setToast(err.message); }
     setTimeout(() => setToast(''), 3000);
   }
 

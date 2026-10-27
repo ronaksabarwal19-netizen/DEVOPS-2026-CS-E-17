@@ -1,6 +1,6 @@
 ﻿# src/ — Source Structure
 
-This document describes the folder layout of the `front-end/src/` directory.
+This document describes the folder layout of the `src/` directory in the `front-end/` Vite application.
 
 ```
 src/

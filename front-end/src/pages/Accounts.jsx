@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Wallet } from 'lucide-react';
-import { getItem, setItem, KEYS } from '../utils/localStorage';
+import { api } from '../utils/api';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
@@ -8,25 +8,23 @@ import Button from '../components/ui/Button';
 export default function Accounts() {
   const [accounts, setAccounts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', type: 'Checking', balance: '', lastDigits: '', cardType: 'Visa' });
 
   useEffect(() => {
-    setAccounts(getItem(KEYS.ACCOUNTS, []));
+    api('/accounts').then((data) => setAccounts(data.accounts || [])).catch((err) => setError(err.message));
   }, []);
 
-  function handleAdd(e) {
+  async function handleAdd(e) {
     e.preventDefault();
-    const newAccount = {
-      id: `acc${Date.now()}`,
-      name: form.name,
-      type: form.type,
-      balance: parseFloat(form.balance) || 0,
-      lastDigits: form.lastDigits || '0000',
-      cardType: form.cardType,
-    };
-    const updated = [...accounts, newAccount];
-    setAccounts(updated);
-    setItem(KEYS.ACCOUNTS, updated);
+    setError('');
+    try {
+      const data = await api('/accounts', { method: 'POST', body: JSON.stringify({
+        name: form.name, type: form.type, balance: parseFloat(form.balance) || 0,
+        lastDigits: form.lastDigits || '0000', cardType: form.cardType,
+      }) });
+      setAccounts((current) => [...current, data.account]);
+    } catch (err) { setError(err.message); return; }
     setOpen(false);
     setForm({ name: '', type: 'Checking', balance: '', lastDigits: '', cardType: 'Visa' });
   }
@@ -40,6 +38,7 @@ export default function Accounts() {
         </Button>
       </div>
 
+      {error && <p className="text-expense text-sm">{error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {accounts.map((acc) => (
           <div key={acc.id} className="bg-card border border-border rounded-lg p-4">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getItem, KEYS } from '../utils/localStorage';
+import { api } from '../utils/api';
 import AccountCard from '../components/dashboard/AccountCard';
 import TransactionItem from '../components/dashboard/TransactionItem';
 import SpendingChart from '../components/dashboard/SpendingChart';
@@ -13,8 +13,9 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    setAccounts(getItem(KEYS.ACCOUNTS, []));
-    setTransactions(getItem(KEYS.TRANSACTIONS, []));
+    Promise.all([api('/accounts'), api('/transactions')])
+      .then(([a, t]) => { setAccounts(a.accounts || []); setTransactions(t.transactions || []); })
+      .catch((err) => console.error('Unable to load dashboard data:', err));
   }, []);
 
   const totalBalance = accounts.reduce((sum, a) => sum + a.balance, 0);
